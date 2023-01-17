@@ -1,14 +1,46 @@
 #include <xc.h>
 #include "LEDarray.h"
 
+#define LED1 LATGbits.LATG0
+#define LED2 LATGbits.LATG1
+#define LED3 LATAbits.LATA2
+#define LED4 LATFbits.LATF6
+#define LED5 LATAbits.LATA4
+#define LED6 LATAbits.LATA5
+#define LED7 LATFbits.LATF0
+#define LED8 LATBbits.LATB0
+#define LED9 LATBbits.LATB1
+
+
+
 /************************************
 / LEDarray_init
 / Function used to initialise pins to drive the LEDarray
 ************************************/
 void LEDarray_init(void)
 {
-    	//set up TRIS registers for pins connected to LED array
+    //set up TRIS registers for pins connected to LED array
+    TRISHbits.TRISH3=0;
+    TRISGbits.TRISG0=0;
+    TRISGbits.TRISG1=0;
+    TRISAbits.TRISA2=0;
+    TRISAbits.TRISA4=0;
+    TRISAbits.TRISA5=0;
+    TRISFbits.TRISF6=0;
+    TRISFbits.TRISF0=0;
+    TRISBbits.TRISB0=0;
+    TRISBbits.TRISB1=0;
 	//set initial output LAT values (they may have random values when powered on)
+    LATHbits.LATH3=0; 
+    LATGbits.LATG0=0;
+    LATGbits.LATG1=0;
+    LATAbits.LATA2=0;
+    LATAbits.LATA4=0;
+    LATAbits.LATA5=0;
+    LATFbits.LATF6=0;
+    LATFbits.LATF0=0;
+    LATBbits.LATB0=0;
+    LATBbits.LATB1=0;
 }
 
 /************************************
@@ -19,6 +51,47 @@ void LEDarray_disp_bin(unsigned int number)
 {
 	//some code to turn on/off the pins connected to the LED array
 	//if statements and bit masks can be used to determine if a particular pin should be on/off
+    LATHbits.LATH3=0; 
+    LATGbits.LATG0=0;
+    LATGbits.LATG1=0;
+    LATAbits.LATA2=0;
+    LATAbits.LATA4=0;
+    LATAbits.LATA5=0;
+    LATFbits.LATF6=0;
+    LATFbits.LATF0=0;
+    LATBbits.LATB0=0;
+    LATBbits.LATB1=0;
+    
+    if (number & 0) {
+        LED1 = 0;
+    }
+    if (number & 1) {
+        LED1 = 1;
+    }
+    if (number & 2) {
+        LED2 = 1;
+    }
+    if (number & 4) {
+        LED3 = 1;
+    }
+    if (number & 8) {
+        LED4 = 1;
+    }
+    if (number & 16) {
+        LED5 = 1;
+    }
+    if (number & 32) {
+        LED6 = 1;
+    }
+    if (number & 64) {
+        LED7 = 1;
+    }
+    if (number & 128) {
+        LED8 = 1;
+    }
+    if (number & 256) {
+        LED9 = 1;
+    }
 	//see Readme.md for examples
 }
 
