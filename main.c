@@ -4,26 +4,35 @@
 
 #include <xc.h>
 #include "LEDarray.h"
+#include "ADC.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void) 
 {
 	unsigned int count=0;
+    unsigned int val = 0;
     LEDarray_init();
+    ADC_init();
     
     // setup pin for input (connected to button)
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin
+    
+    // get initial reference light level
+    unsigned int refval = 0;
+    refval = ADC_getval();
   
     while (1) {
+//        
+        val = ADC_getval();
+        val = val * 256;
+        val = (val/refval);
         
-        if (!PORTFbits.RF2){
-            count++; // increment count
-        }
+        LEDarray_disp_bar(val); //output on the LED array
         
-		if (count>511) {count=0;} //reset a when it gets too big
-		LEDarray_disp_dec(count); //output a on the LED array in binary
-		__delay_ms(400); // Delay so human eye can see change
+        
+//		__delay_ms(400); // Delay so human eye can see change
+        
     }
 }

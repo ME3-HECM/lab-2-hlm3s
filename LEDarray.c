@@ -108,18 +108,58 @@ void LEDarray_disp_dec(unsigned int number)
 	//format and store in disp_val for display on the LED array
     
     if (number < 10) {
-        disp_val = 0
+        disp_val = 0;
     }
     if (number >= 10) {
-        disp_val = 1
+        disp_val = 1;
     }
     if (number >= 20) {
-        disp_val = 2
+        disp_val = 2;
     }
 
 	LEDarray_disp_bin(disp_val); 	//display value on LED array
 }
 
+
+/************************************
+/ Function LEDarray_disp_lev
+/ Used to display a light level on the LEDs
+/ where each LED is a an increase of 256/8
+************************************/
+void LEDarray_disp_bar(unsigned int number)
+{
+	unsigned int disp_val = 0;
+    
+	//some code to manipulate the variable number into the correct
+	//format and store in disp_val for display on the LED array
+    
+    if (number < 31) {
+        disp_val = 0;
+    }
+    if (number >= 63) {
+        disp_val = 1;
+    }
+    if (number >= 95) {
+        disp_val = 3;
+    }
+    if (number >= 137) {
+        disp_val = 7;
+    }
+    if (number >= 159) {
+        disp_val = 15;
+    }
+    if (number >= 191) {
+        disp_val = 31;
+    }
+    if (number >= 223) {
+        disp_val = 63;
+    }
+    if (number >= 255) {
+        disp_val = 127;
+    }
+
+	LEDarray_disp_bin(disp_val); 	//display value on LED array
+}
 
 /************************************
 / LEDarray_disp_PPM
