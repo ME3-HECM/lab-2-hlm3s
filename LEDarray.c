@@ -102,10 +102,20 @@ void LEDarray_disp_bin(unsigned int number)
 ************************************/
 void LEDarray_disp_dec(unsigned int number)
 {
-	unsigned int disp_val;
-	
+	unsigned int disp_val = 0;
+    
 	//some code to manipulate the variable number into the correct
 	//format and store in disp_val for display on the LED array
+    
+    if (number < 10) {
+        disp_val = 0
+    }
+    if (number >= 10) {
+        disp_val = 1
+    }
+    if (number >= 20) {
+        disp_val = 2
+    }
 
 	LEDarray_disp_bin(disp_val); 	//display value on LED array
 }

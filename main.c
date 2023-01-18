@@ -11,24 +11,19 @@ void main(void)
 {
 	unsigned int count=0;
     LEDarray_init();
-   
+    
+    // setup pin for input (connected to button)
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin
   
     while (1) {
-		count++; // increment count
-//        LATGbits.LATG0 = !LATGbits.LATG1;
-//        LATGbits.LATG1 = !LATGbits.LATG0;
-//        LATGbits.LATG0 = !LATGbits.LATG0;
-//        LATGbits.LATG1 = !LATGbits.LATG0;
-//        LATAbits.LATA2 = !LATGbits.LATG0;
-//        LATAbits.LATA4 = !LATGbits.LATG0;
-//        LATAbits.LATA5 = !LATGbits.LATG0;
-//        LATFbits.LATF6 = !LATGbits.LATG0;
-//        LATFbits.LATF0 = !LATGbits.LATG0;
-//        LATBbits.LATB0 = !LATGbits.LATG0;
-//        LATBbits.LATB1 = !LATGbits.LATG0;
+        
+        if (!PORTFbits.RF2){
+            count++; // increment count
+        }
         
 		if (count>511) {count=0;} //reset a when it gets too big
-		LEDarray_disp_bin(count); //output a on the LED array in binary
-		__delay_ms(50); // Delay so human eye can see change
+		LEDarray_disp_dec(count); //output a on the LED array in binary
+		__delay_ms(400); // Delay so human eye can see change
     }
 }
