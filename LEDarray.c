@@ -137,14 +137,20 @@ void LEDarray_disp_PPM(unsigned int number, unsigned int max)
 {
     unsigned int lev = 0;
     unsigned int maxlev = 0;
+    int inc;
+    int count = 0;
     
-    while (number > 1){
-        number = number >> 1;
+    inc = 255/8;
+    
+    while (count < number){
+        count += inc;
         lev ++;   
     }
     
-    while (max > 1){
-        max = max >> 1;
+    count = 0;
+    
+    while (count < max){
+        count += inc;
         maxlev ++;   
     }
     

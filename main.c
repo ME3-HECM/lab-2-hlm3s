@@ -30,7 +30,7 @@ void main(void)
         
         
         int i;
-        for(i=0; i<10; i++) {
+        for(i=0; i<100; i++) {
             
             val = ADC_getval() - 50;
         
@@ -45,13 +45,18 @@ void main(void)
                 peakval = val;
             }
             
+            
             LEDarray_disp_PPM(val,peakval);
 
-            __delay_ms(50); // Delay to make 1s
+            __delay_ms(10); // Delay to make 1s
         }
-
         
-        peakval = peakval - 20;
+        peakval = peakval - 255/8;
+        
+        if (peakval > 255) {
+        peakval = 0;
+        }
+       
         
                 
         
