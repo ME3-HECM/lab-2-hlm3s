@@ -3,6 +3,7 @@
 #pragma config WDTE = OFF        // WDT operating mode (WDT enabled regardless of sleep)
 
 #include <xc.h>
+#include <math.h>
 #include "LEDarray.h"
 #include "ADC.h"
 
@@ -22,17 +23,49 @@ void main(void)
     // get initial reference light level
     unsigned int refval = 0;
     refval = ADC_getval();
-  
+    unsigned int peakval = 0;
+    
     while (1) {
-//        
+        
+        LATHbits.LATH3=0; 
+        LATGbits.LATG0=0;
+        LATGbits.LATG1=0;
+        LATAbits.LATA2=0;
+        LATAbits.LATA4=0;
+        LATAbits.LATA5=0;
+        LATFbits.LATF6=0;
+        LATFbits.LATF0=0;
+        LATBbits.LATB0=0;
+        LATBbits.LATB1=0;
+//       
+        unsigned int powtwo = 1;
+        
+        int i;
+        
+        for(i=0; i<10; i++) {
+        
         val = ADC_getval();
         val = val * 256;
         val = (val/refval);
         
+        if (val>peakval) {
+            peakval = val;
+            while (peakval > powtwo) {
+            powtwo = powtwo * 2;
+            }
+            peakval = powtwo/4;
+        }
+        
         LEDarray_disp_bar(val); //output on the LED array
+        LEDarray_disp_bin(peakval);
         
         
-//		__delay_ms(400); // Delay so human eye can see change
+		__delay_ms(50); // Delay to make 1s
+        }
+        
+        peakval = peakval/2;
+        
+                
         
     }
 }
