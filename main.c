@@ -11,59 +11,47 @@
 
 void main(void) 
 {
+    
 	unsigned int count=0;
     unsigned int val = 0;
     LEDarray_init();
     ADC_init();
     
     // setup pin for input (connected to button)
-    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
-    ANSELFbits.ANSELF2=0; //turn off analogue input on pin
+//    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+//    ANSELFbits.ANSELF2=0; //turn off analogue input on pin
     
     // get initial reference light level
     unsigned int refval = 0;
-    refval = ADC_getval();
+    refval = ADC_getval() - 50;
     unsigned int peakval = 0;
     
     while (1) {
         
-        LATHbits.LATH3=0; 
-        LATGbits.LATG0=0;
-        LATGbits.LATG1=0;
-        LATAbits.LATA2=0;
-        LATAbits.LATA4=0;
-        LATAbits.LATA5=0;
-        LATFbits.LATF6=0;
-        LATFbits.LATF0=0;
-        LATBbits.LATB0=0;
-        LATBbits.LATB1=0;
-//       
-        unsigned int powtwo = 1;
         
         int i;
-        
         for(i=0; i<10; i++) {
+            
+            val = ADC_getval() - 50;
         
-        val = ADC_getval();
-        val = val * 256;
-        val = (val/refval);
-        
-        if (val>peakval) {
-            peakval = val;
-            while (peakval > powtwo) {
-            powtwo = powtwo * 2;
+            if (val > 255) {
+                val = 0;
             }
-            peakval = powtwo/4;
+
+            val = val << 8;
+            val = (val/refval);
+
+            if (val>peakval) {
+                peakval = val;
+            }
+            
+            LEDarray_disp_PPM(val,peakval);
+
+            __delay_ms(50); // Delay to make 1s
         }
+
         
-        LEDarray_disp_bar(val); //output on the LED array
-        LEDarray_disp_bin(peakval);
-        
-        
-		__delay_ms(50); // Delay to make 1s
-        }
-        
-        peakval = peakval/2;
+        peakval = peakval - 20;
         
                 
         

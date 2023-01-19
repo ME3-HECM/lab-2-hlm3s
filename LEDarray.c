@@ -62,36 +62,17 @@ void LEDarray_disp_bin(unsigned int number)
 //    LATBbits.LATB0=0;
 //    LATBbits.LATB1=0;
     
-    if (number & 0) {
-        LED1 = 0;
-    }
-    if (number & 1) {
-        LED1 = 1;
-    }
-    if (number & 2) {
-        LED2 = 1;
-    }
-    if (number & 4) {
-        LED3 = 1;
-    }
-    if (number & 8) {
-        LED4 = 1;
-    }
-    if (number & 16) {
-        LED5 = 1;
-    }
-    if (number & 32) {
-        LED6 = 1;
-    }
-    if (number & 64) {
-        LED7 = 1;
-    }
-    if (number & 128) {
-        LED8 = 1;
-    }
-    if (number & 256) {
-        LED9 = 1;
-    }
+    LED1 = (number & 0b000000001);
+    LED2 = (number & 0b000000010) >> 1;
+    LED3 = (number & 0b000000100) >> 2;
+    LED4 = (number & 0b000001000) >> 3;
+    LED5 = (number & 0b000010000) >> 4;
+    LED6 = (number & 0b000100000) >> 5;
+    LED7 = (number & 0b001000000) >> 6;
+    LED8 = (number & 0b010000000) >> 7;
+    LED9 = (number & 0b100000000) >> 8;
+            
+    
 	//see Readme.md for examples
 }
 
@@ -128,37 +109,22 @@ void LEDarray_disp_dec(unsigned int number)
 ************************************/
 void LEDarray_disp_bar(unsigned int number)
 {
-	unsigned int disp_val = 0;
+    
+    unsigned int lev = 0;
+    
+    while (number > 1){
+        number = number >> 1;
+        lev ++;   
+    }
+    
+    unsigned int disp_val = 0;
+    disp_val = 1 << lev;
+    LEDarray_disp_bin(disp_val - 1);
+    
+    
     
 	//some code to manipulate the variable number into the correct
 	//format and store in disp_val for display on the LED array
-    
-    if (number < 31) {
-        disp_val = 0;
-    }
-    if (number >= 63) {
-        disp_val = 1;
-    }
-    if (number >= 95) {
-        disp_val = 3;
-    }
-    if (number >= 137) {
-        disp_val = 7;
-    }
-    if (number >= 159) {
-        disp_val = 15;
-    }
-    if (number >= 191) {
-        disp_val = 31;
-    }
-    if (number >= 223) {
-        disp_val = 63;
-    }
-    if (number >= 255) {
-        disp_val = 127;
-    }
-
-	LEDarray_disp_bin(disp_val); 	//display value on LED array
 }
 
 /************************************
@@ -167,13 +133,31 @@ void LEDarray_disp_bar(unsigned int number)
 / cur_val is the current level from the most recent sample, and max is the peak value for the last second
 / these input values need to calculated else where in your code
 ************************************/
-void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max)
+void LEDarray_disp_PPM(unsigned int number, unsigned int max)
 {
-	unsigned int disp_val;
+    unsigned int lev = 0;
+    unsigned int maxlev = 0;
+    
+    while (number > 1){
+        number = number >> 1;
+        lev ++;   
+    }
+    
+    while (max > 1){
+        max = max >> 1;
+        maxlev ++;   
+    }
+    
+    unsigned int disp_val = 0;
+    unsigned int max_val = 0;
+    unsigned int fin_val = 0;
+    disp_val = (1 << lev) - 1;
+    max_val = 1 << (maxlev - 1);
+    fin_val = (disp_val)|(max_val);
+    
+    LEDarray_disp_bin(fin_val);
 	
 	// some code to format the variable cur_val and max, store in disp_val for display on the LED array
 	// hint: one method is to manipulate the variables separately and then combine them using the bitwise OR operator
 
-	LEDarray_disp_bin(disp_val);	//display value on LED array
 }
-
